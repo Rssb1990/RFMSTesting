@@ -3,8 +3,11 @@ describe('RFMS Testing Automation', () => {
         let sum = undefined;
         cy.visit('https://iamuat.zims.in:8081//Identity/Account/Login?ReturnUrl=https://rfms-uat.zims.in:13254/&AppName=rfms');
 
-        cy.get('#Input_SewadarId').type('BH0011LB6735');
-        cy.get('#Input_Password').type('Rssb@12345');
+        // cy.get('#Input_SewadarId').type('BH0011LB6735');
+        // cy.get('#Input_Password').type('Rssb@12345');
+
+        cy.get('#Input_SewadarId').type('pro-hod');
+        cy.get('#Input_Password').type('Rssb@1234');
 
 
         cy.get('.captcha-style').then(()=>{
@@ -31,7 +34,11 @@ describe('RFMS Testing Automation', () => {
         ];
 
         // Get the day, month, and year components from the Date object
-        const day = currentDate.getDate();
+
+        let day = currentDate.getDate();
+
+        if(day<10) day = '0' + day;
+
         const month = monthNames[currentDate.getMonth()];
         const year = currentDate.getFullYear();
 
@@ -96,73 +103,87 @@ describe('RFMS Testing Automation', () => {
 
     });
 
-    it('Initiation year testing(Maharaj Sawan Singh ji)', () =>{
-        cy.get('[name="master"]').click().type('MAHARAJ SAWAN SINGH JI').type("{downarrow}").type("{enter}");
+    it('Checks for all master initiaon years',() =>{
 
-        cy.get('[name="initiationyear"]').click().type('1900');
-
-        cy.get('#initiationmonth').click();
-  
-        cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
-  
-        cy.get('[name="initiationyear"]').click().clear().type('1920');
+        cy.fixture('initiationYear2.json').then((master_file) =>{
         
-        cy.get('#initiationmonth').click();
-  
-        cy.get('[style="font-weight: bold; color: red;"]').should('not.exist');
-  
-        cy.get('[name="initiationyear"]').click().clear().type('1950');
-  
-        cy.get('#initiationmonth').click();
-  
-        cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
-
-    });
-
-    it('Initiation year testing(SARDAR BHADUR JI)', () =>{
-        cy.get('[name="master"]').click().clear().type('SARDAR BHADUR JI').type("{downarrow}").type("{enter}");
-
-      cy.get('#initiationmonth').click();
-
-      cy.get('[name="initiationyear"]').click().type('1947');
-
-      cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
-
-      cy.get('[name="initiationyear"]').click().clear().type('1951');
-      
-      cy.get('#initiationmonth').click();
-
-      cy.get('[style="font-weight: bold; color: red;"]').should('not.exist');
-
-      cy.get('[name="initiationyear"]').click().clear().type('1952');
-
-      cy.get('#initiationmonth').click();
-
-      cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
-    });
-
+            for(let loop_var2=0; loop_var2<master_file.master_names.length; loop_var2++){
     
-    it('Initiation year testing(MAHARAJ CHARAN SINGH JI)', () =>{
-        cy.get('[name="master"]').click().clear().type('MAHARAJ CHARAN SINGH JI').type("{downarrow}").type("{enter}");
+              let master_name = master_file.master_names[loop_var2];
+              let years_of_presence = master_file.years_of_initiation[loop_var2]
+    
+              let current_master = true;
+    
+              let test1 = years_of_presence[0] -1;
+              let test2 = 0;
+              let test3 = 0;
+    
+              if(years_of_presence.length==2) current_master = false;
+    
+              if(current_master){
+                const currentDate = new Date();
+                
+                test3 = test1; //To be deleted. Chnaged with-> currentDate.getFullYear()+1
+    
+                cy.log(`test 3 in loop_var ${loop_var2} is ${test3}`);
+    
+                test2 = Math.floor((currentDate.getFullYear() + years_of_presence[0])/2)
+    
+                cy.log(`test 2 in loop_var ${loop_var2} is ${test2}`);
+              } else {
+                test3 = years_of_presence[1] +1;
+    
+                cy.log(`test 3 in loop_var ${loop_var2} is ${test3}`);
+    
+                test2 = Math.floor((years_of_presence[1]+years_of_presence[0])/2)
+    
+                cy.log(`test 2 in loop_var ${loop_var2} is ${test2}`);
+              }
+    
+              cy.get('[name="master"]').click().clear().type(`${master_name}`).type("{downarrow}").type("{enter}");
+              cy.get('#initiationmonth').click();
+              cy.get('[name="initiationyear"]').click().clear().type(`${test1}`);
+              cy.get('#initiationmonth').click();
+              cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
+    
+    
+              cy.get('[name="initiationyear"]').click().clear().type(`${test2}`);
+              cy.get('#initiationmonth').click();
+              cy.get('[style="font-weight: bold; color: red;"]').should('not.exist');
+    
+              cy.get('[name="initiationyear"]').click().clear().type(`${test3}`);
+              cy.get('#initiationmonth').click();
+              cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
+    
+    
+            }
+          
+          })
 
-        cy.get('#initiationmonth').click();
+    })
+
+    // it('Initiation year testing(Maharaj Sawan Singh ji)', () =>{
+    //     cy.get('[name="master"]').click().type('MAHARAJ SAWAN SINGH JI').type("{downarrow}").type("{enter}");
+
+    //     cy.get('[name="initiationyear"]').click().type('1900');
+
+    //     cy.get('#initiationmonth').click();
   
-        cy.get('[name="initiationyear"]').click().type('1950');
+    //     cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
   
-        cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
-  
-        cy.get('[name="initiationyear"]').click().clear().type('1960');
+    //     cy.get('[name="initiationyear"]').click().clear().type('1920');
         
-        cy.get('#initiationmonth').click();
+    //     cy.get('#initiationmonth').click();
   
-        cy.get('[style="font-weight: bold; color: red;"]').should('not.exist');
+    //     cy.get('[style="font-weight: bold; color: red;"]').should('not.exist');
   
-        cy.get('[name="initiationyear"]').click().clear().type('1991');
+    //     cy.get('[name="initiationyear"]').click().clear().type('1950');
   
-        cy.get('#initiationmonth').click();
+    //     cy.get('#initiationmonth').click();
   
-        cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
-    });
+    //     cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
+
+    // });
   
     
   })
