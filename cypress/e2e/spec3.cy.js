@@ -49,6 +49,13 @@ describe('RFMS Testing Automation', () => {
 
     });
 
+    it('Place and form type check', () =>{
+      cy.get('#place > div').should('have.text','DELHI (DLH)');
+
+      cy.get('#formtype > div').should('have.text','INDIAN');
+      
+    })
+
     it('Checks if genders are in synchronization', ()=>{
 
         cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-auto > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type('Miss').type('{downarrow}').type('{enter}');
@@ -102,6 +109,17 @@ describe('RFMS Testing Automation', () => {
         cy.get('#age').should('have.value',`${age}`);
 
     });
+
+    it('Checks if Initiated as is in sync with Spouse name', () =>{
+
+        cy.get('[name="initiatedas"]').click().clear().type('SINGLE').type("{downarrow}").type("{enter}");
+
+        cy.get('[name="spousename"]').should('be.disabled');
+  
+        cy.get('[name="initiatedas"]').click().clear().type('COUPLE').type("{downarrow}").type("{enter}");
+  
+        cy.get('[name="spousename"]').should('be.enabled');
+    })
 
     it('Checks for all master initiaon years',() =>{
 
@@ -162,6 +180,10 @@ describe('RFMS Testing Automation', () => {
 
     })
 
+    //------------------------------------------------------------------------------------------------------------------
+
+              //KEPT FOR TESTING SCRIPT ROUGH
+
     // it('Initiation year testing(Maharaj Sawan Singh ji)', () =>{
     //     cy.get('[name="master"]').click().type('MAHARAJ SAWAN SINGH JI').type("{downarrow}").type("{enter}");
 
@@ -184,6 +206,62 @@ describe('RFMS Testing Automation', () => {
     //     cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
 
     // });
+
+    //--------------------------------------------------------------------------------------------------------------------
+
+    it('Submission of form and Form number generation', () =>{
+
+      //------------------------------------------------------------------------------------------------------------------------
+      // Improvements required are that Test data JSON file need to be improved and new way of filling data will be introduced.
+      //-------------------------------------------------------------------------------------------------------------------------
+
+
+      cy.fixture('slipGenerationData.json').then((dataFillingFile) =>{
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-auto > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Title}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > #name').type(`${dataFillingFile.Name}`);
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Father_name}`);
+
+        cy.get(':nth-child(5) > .MuiFormControl-root > .MuiInputBase-root > #grandfathername').type(`${dataFillingFile.Grandfather_name}`);
+
+
+        // -----------------------------------------------------------------
+        //Add country Selection option also. Its currently missing.
+        // -----------------------------------------------------------------
+
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.State}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.District}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(9) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(`${dataFillingFile.Post_office}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(11) > .MuiFormControl-root > .MuiInputBase-root > #address').type(`${dataFillingFile.Address}`);
+
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root');
+
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.DOB}`);
+
+        cy.get('.MuiGrid-grid-xs-3 > .MuiButtonBase-root').click();
+
+        cy.get('[name="master"]').click().clear().type(`${dataFillingFile.Master_name}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiationyear"]').click().clear().type(`${dataFillingFile.Initiation_year}`);
+
+        cy.get('[name="placeof initiation"]').click().type(`${dataFillingFile.Place_of_initiation}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiatedas"]').click().clear().type(`${dataFillingFile.Initiated_as}`).type("{downarrow}").type("{enter}");
+
+        cy.get('.css-kh98e3 > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
+
+        cy.get('#root > main > div.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-column.content-panel.css-bp6iic > footer > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true.css-1kycp66 > button').click();
+
+        cy.get(':nth-child(1) > .ResittingFormView_left-normal-padding__-uuXl').should('exist');
+
+      })
+    })
   
     
   })

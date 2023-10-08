@@ -17,61 +17,55 @@ describe('Testing Automation RFMS',()=>{
       });
       cy.get('#app-menu-button').click();
       cy.get('.MuiList-root > li').contains('New Resitting Form').click();
-      
-      cy.fixture('initiationYear2.json').then((master_file) =>{
-        
-        for(let loop_var2=0; loop_var2<master_file.master_names.length; loop_var2++){
 
-          let master_name = master_file.master_names[loop_var2];
-          let years_of_presence = master_file.years_of_initiation[loop_var2]
+      cy.fixture('slipGenerationData.json').then((dataFillingFile) =>{
 
-          let current_master = true;
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-auto > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Title}`).type('{downarrow}').type('{enter}');
 
-          let test1 = years_of_presence[0] -1;
-          let test2 = 0;
-          let test3 = 0;
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > #name').type(`${dataFillingFile.Name}`);
 
-          if(years_of_presence.length==2) current_master = false;
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Father_name}`);
 
-          if(current_master){
-            const currentDate = new Date();
-            
-            test3 = test1; //To be deleted. Chnaged with-> currentDate.getFullYear()+1
+        cy.get(':nth-child(5) > .MuiFormControl-root > .MuiInputBase-root > #grandfathername').type(`${dataFillingFile.Grandfather_name}`);
 
-            cy.log(`test 3 in loop_var ${loop_var2} is ${test3}`);
+        // -----------------------------------------------------------------
+        //Add country Selection option also. Its currently missing.
+        // -----------------------------------------------------------------
 
-            test2 = Math.floor((currentDate.getFullYear() + years_of_presence[0])/2)
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.State}`).type('{downarrow}').type('{enter}');
 
-            cy.log(`test 2 in loop_var ${loop_var2} is ${test2}`);
-          } else {
-            test3 = years_of_presence[1] +1;
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.District}`).type('{downarrow}').type('{enter}');
 
-            cy.log(`test 3 in loop_var ${loop_var2} is ${test3}`);
+        cy.get(':nth-child(9) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(`${dataFillingFile.Post_office}`).type('{downarrow}').type('{enter}');
 
-            test2 = Math.floor((years_of_presence[1]+years_of_presence[0])/2)
+        cy.get(':nth-child(11) > .MuiFormControl-root > .MuiInputBase-root > #address').type(`${dataFillingFile.Address}`);
 
-            cy.log(`test 2 in loop_var ${loop_var2} is ${test2}`);
-          }
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root');
 
-          cy.get('[name="master"]').click().clear().type(`${master_name}`).type("{downarrow}").type("{enter}");
-          cy.get('#initiationmonth').click();
-          cy.get('[name="initiationyear"]').click().clear().type(`${test1}`);
-          cy.get('#initiationmonth').click();
-          cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.DOB}`);
 
+        cy.get('.MuiGrid-grid-xs-3 > .MuiButtonBase-root').click();
 
-          cy.get('[name="initiationyear"]').click().clear().type(`${test2}`);
-          cy.get('#initiationmonth').click();
-          cy.get('[style="font-weight: bold; color: red;"]').should('not.exist');
+        cy.get('[name="master"]').click().clear().type(`${dataFillingFile.Master_name}`).type("{downarrow}").type("{enter}");
 
-          cy.get('[name="initiationyear"]').click().clear().type(`${test3}`);
-          cy.get('#initiationmonth').click();
-          cy.get('[style="font-weight: bold; color: red;"]').should('have.text','Please enter valid year');
+        cy.get('[name="initiationyear"]').click().clear().type(`${dataFillingFile.Initiation_year}`);
+
+        cy.get('[name="placeof initiation"]').click().type(`${dataFillingFile.Place_of_initiation}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiatedas"]').click().clear().type(`${dataFillingFile.Initiated_as}`).type("{downarrow}").type("{enter}");
+
+        cy.get('.css-kh98e3 > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
+
+        cy.get('#root > main > div.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-column.content-panel.css-bp6iic > footer > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true.css-1kycp66 > button').click();
+
+        cy.get(':nth-child(1) > .ResittingFormView_left-normal-padding__-uuXl').should('exist')
+
+        // cy.get('h1').should('have.text', 'NAAMDAAN RE-SITTING APPLICATION FORM');
 
 
-        }
-      
       })
+
+      cy.log("Complete");
       
     })
 
