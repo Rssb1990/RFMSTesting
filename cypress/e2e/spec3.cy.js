@@ -121,7 +121,57 @@ describe('RFMS Testing Automation', () => {
         cy.get('[name="spousename"]').should('be.enabled');
     })
 
-    it('Checks for all master initiaon years',() =>{
+    it('Checks if copy button in working or not', () =>{
+      cy.fixture('slipGenerationData.json').then((dataFillingFile) =>{
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-auto > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Title}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > #name').type(`${dataFillingFile.Name}`);
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Father_name}`);
+
+        cy.get(':nth-child(5) > .MuiFormControl-root > .MuiInputBase-root > #grandfathername').type(`${dataFillingFile.Grandfather_name}`);
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.State}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.District}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(9) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(`${dataFillingFile.Post_office}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(11) > .MuiFormControl-root > .MuiInputBase-root > #address').type(`${dataFillingFile.Address}`);
+
+        cy.get('.MuiGrid-grid-xs-3 > .MuiButtonBase-root').click();
+
+        //-------------------------------2nd Part checking-------------------------------------------------------------------------
+
+        //Title checking
+        cy.get('[id=":r1v:"]').should('have.value', 'Mr.');
+
+        //Name checking
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > .css-rk8e6v > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Name}`);
+
+        //Father checking
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(3) > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Father_name}`);
+
+        //GrandFather checking
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Grandfather_name}`);
+
+        //State
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(6) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.State}`);
+
+        //District
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.District}`);
+
+        //Postoffice
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Post_office}`);
+
+        //Address
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(10) > .MuiFormControl-root > .MuiInputBase-root > textarea').should('have.value', `${dataFillingFile.Address}`);
+
+      })
+    })
+
+    it('Checks for all master initiation years',() =>{
 
         cy.fixture('initiationYear2.json').then((master_file) =>{
         
@@ -182,7 +232,7 @@ describe('RFMS Testing Automation', () => {
 
     //------------------------------------------------------------------------------------------------------------------
 
-              //KEPT FOR TESTING SCRIPT ROUGH
+              //KEPT FOR TESTING SCRIPT (ROUGH)
 
     // it('Initiation year testing(Maharaj Sawan Singh ji)', () =>{
     //     cy.get('[name="master"]').click().type('MAHARAJ SAWAN SINGH JI').type("{downarrow}").type("{enter}");
@@ -258,7 +308,231 @@ describe('RFMS Testing Automation', () => {
 
         cy.get('#root > main > div.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-column.content-panel.css-bp6iic > footer > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true.css-1kycp66 > button').click();
 
-        cy.get(':nth-child(1) > .ResittingFormView_left-normal-padding__-uuXl').should('exist');
+        cy.get(':nth-child(2) > h2').should('exist');
+
+      })
+    })
+
+    it('Submit forms and checks data', () =>{
+      cy.fixture('slipGenerationData.json').then((dataFillingFile) =>{
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-auto > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Title}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > #name').type(`${dataFillingFile.Name}`);
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Father_name}`);
+
+        cy.get(':nth-child(5) > .MuiFormControl-root > .MuiInputBase-root > #grandfathername').type(`${dataFillingFile.Grandfather_name}`);
+
+        // -----------------------------------------------------------------
+        //Add country Selection option also. Its currently missing.
+        // -----------------------------------------------------------------
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.State}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.District}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(9) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(`${dataFillingFile.Post_office}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(11) > .MuiFormControl-root > .MuiInputBase-root > #address').type(`${dataFillingFile.Address}`);
+
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root');
+
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.DOB}`);
+
+        cy.get('.MuiGrid-grid-xs-3 > .MuiButtonBase-root').click();
+
+        cy.get('[name="master"]').click().clear().type(`${dataFillingFile.Master_name}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiationyear"]').click().clear().type(`${dataFillingFile.Initiation_year}`);
+
+        cy.get('[name="placeof initiation"]').click().type(`${dataFillingFile.Place_of_initiation}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiatedas"]').click().clear().type(`${dataFillingFile.Initiated_as}`).type("{downarrow}").type("{enter}");
+
+        cy.get('.css-kh98e3 > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
+
+        cy.get('#root > main > div.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-column.content-panel.css-bp6iic > footer > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true.css-1kycp66 > button').click().wait(1000);
+
+        cy.get(':nth-child(2) > h2').should('exist');
+
+        //-------------------------------------Very Sensitive to changes in frontend-------------------------------------------------
+
+        //Title
+        cy.get(':nth-child(2) > ul > .ResittingFormView_twin-attributes__e6CBs > :nth-child(1) > :nth-child(2)').should('have.text', `${dataFillingFile.Title}`); 
+
+        //Name
+        cy.get(':nth-child(2) > ul > .ResittingFormView_twin-attributes__e6CBs > :nth-child(2) > :nth-child(2)').should('have.text', `${dataFillingFile.Name}`);
+
+        //Father name
+        cy.get(':nth-child(2) > ul > :nth-child(3) > :nth-child(2)').should('have.text', `${dataFillingFile.Father_name}`);
+
+        //Grand Father name
+        cy.get(':nth-child(2) > ul > :nth-child(4) > :nth-child(2)').should('have.text', `${dataFillingFile.Grandfather_name}`);
+
+        //Gender
+        cy.get(':nth-child(2) > ul > :nth-child(2) > :nth-child(2)').should('have.text', `${dataFillingFile.Gender}`);
+
+        // Address
+        cy.get(':nth-child(8) > [colspan="3"]').should('have.text', `${dataFillingFile.Address}`);
+
+        //Post Office
+        cy.get(':nth-child(2) > ul > :nth-child(8) > :nth-child(2)').should('have.text', `${dataFillingFile.Post_office}`);
+
+        //State
+        cy.get(':nth-child(2) > ul > :nth-child(6) > :nth-child(2)').should('have.text', `${dataFillingFile.State}`);
+
+        //District
+        cy.get(':nth-child(2) > ul > :nth-child(7) > :nth-child(2)').should('have.text', `${dataFillingFile.District}`);
+
+        /*=============================================2nd Part testing==========================================================*/ 
+
+        //Mr. 
+        cy.get(':nth-child(3) > ul > :nth-child(1) > :nth-child(1) > :nth-child(2)').should('have.text', `${dataFillingFile.Title}`);
+
+        //Name
+        cy.get(':nth-child(3) > ul > :nth-child(1) > :nth-child(2) > :nth-child(2)').should('have.text', `${dataFillingFile.Name}`);
+
+        //Father
+        cy.get(':nth-child(3) > ul > :nth-child(3) > :nth-child(2)').should('have.text', `${dataFillingFile.Father_name}`);
+
+        //Grand Father
+        cy.get(':nth-child(3) > ul > :nth-child(4) > :nth-child(2)').should('have.text', `${dataFillingFile.Grandfather_name}`);
+
+        //State
+        cy.get(':nth-child(3) > ul > :nth-child(6) > :nth-child(2)').should('have.text', `${dataFillingFile.State}`);
+
+        //District
+        cy.get(':nth-child(3) > ul > :nth-child(7) > :nth-child(2)').should('have.text', `${dataFillingFile.District}`);
+
+        //Address
+        cy.get(':nth-child(3) > ul > :nth-child(10) > :nth-child(2)').should('have.text', `${dataFillingFile.Address}`);
+
+        /*===========================================Initiation Details======================================================= */
+
+        //Master name
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(1) > :nth-child(2)').should('have.text', `${dataFillingFile.Master_name}`);
+        
+        //Place of Initiation
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(3) > :nth-child(2)').should('have.text', `${dataFillingFile.Place_of_initiation}`);
+
+        //Initiation Year
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(4) > :nth-child(2)').should('have.text', `${dataFillingFile.Initiation_year}`);
+
+        //Initiated as
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(6) > :nth-child(2)').should('have.text', `${dataFillingFile.Initiated_as}`);
+
+      })
+    })
+
+    it('Submit forms and checks data', () =>{
+      cy.fixture('slipGenerationData.json').then((dataFillingFile) =>{
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-auto > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Title}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > .MuiGrid-spacing-xs-1 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > #name').type(`${dataFillingFile.Name}`);
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.Father_name}`);
+
+        cy.get(':nth-child(5) > .MuiFormControl-root > .MuiInputBase-root > #grandfathername').type(`${dataFillingFile.Grandfather_name}`);
+
+        // -----------------------------------------------------------------
+        //Add country Selection option also. Its currently missing.
+        // -----------------------------------------------------------------
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.State}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.District}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(9) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(`${dataFillingFile.Post_office}`).type('{downarrow}').type('{enter}');
+
+        cy.get(':nth-child(11) > .MuiFormControl-root > .MuiInputBase-root > #address').type(`${dataFillingFile.Address}`);
+
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root');
+
+        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.DOB}`);
+
+        cy.get('.MuiGrid-grid-xs-3 > .MuiButtonBase-root').click();
+
+        cy.get('[name="master"]').click().clear().type(`${dataFillingFile.Master_name}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiationyear"]').click().clear().type(`${dataFillingFile.Initiation_year}`);
+
+        cy.get('[name="placeof initiation"]').click().type(`${dataFillingFile.Place_of_initiation}`).type("{downarrow}").type("{enter}");
+
+        cy.get('[name="initiatedas"]').click().clear().type(`${dataFillingFile.Initiated_as}`).type("{downarrow}").type("{enter}");
+
+        cy.get('.css-kh98e3 > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
+
+        cy.get('#root > main > div.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-column.content-panel.css-bp6iic > footer > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true.css-1kycp66 > button').click().wait(1000);
+
+        cy.get(':nth-child(2) > h2').should('exist');
+
+        //-------------------------------------Very Sensitive to changes in frontend-------------------------------------------------
+
+        //Title
+        cy.get(':nth-child(2) > ul > .ResittingFormView_twin-attributes__e6CBs > :nth-child(1) > :nth-child(2)').should('have.text', `${dataFillingFile.Title}`); 
+
+        //Name
+        cy.get(':nth-child(2) > ul > .ResittingFormView_twin-attributes__e6CBs > :nth-child(2) > :nth-child(2)').should('have.text', `${dataFillingFile.Name}`);
+
+        //Father name
+        cy.get(':nth-child(2) > ul > :nth-child(3) > :nth-child(2)').should('have.text', `${dataFillingFile.Father_name}`);
+
+        //Grand Father name
+        cy.get(':nth-child(2) > ul > :nth-child(4) > :nth-child(2)').should('have.text', `${dataFillingFile.Grandfather_name}`);
+
+        //Gender
+        cy.get(':nth-child(2) > ul > :nth-child(2) > :nth-child(2)').should('have.text', `${dataFillingFile.Gender}`);
+
+        // Address
+        cy.get(':nth-child(8) > [colspan="3"]').should('have.text', `${dataFillingFile.Address}`);
+
+        //Post Office
+        cy.get(':nth-child(2) > ul > :nth-child(8) > :nth-child(2)').should('have.text', `${dataFillingFile.Post_office}`);
+
+        //State
+        cy.get(':nth-child(2) > ul > :nth-child(6) > :nth-child(2)').should('have.text', `${dataFillingFile.State}`);
+
+        //District
+        cy.get(':nth-child(2) > ul > :nth-child(7) > :nth-child(2)').should('have.text', `${dataFillingFile.District}`);
+
+        /*=============================================2nd Part testing==========================================================*/ 
+
+        //Mr. 
+        cy.get(':nth-child(3) > ul > :nth-child(1) > :nth-child(1) > :nth-child(2)').should('have.text', `${dataFillingFile.Title}`);
+
+        //Name
+        cy.get(':nth-child(3) > ul > :nth-child(1) > :nth-child(2) > :nth-child(2)').should('have.text', `${dataFillingFile.Name}`);
+
+        //Father
+        cy.get(':nth-child(3) > ul > :nth-child(3) > :nth-child(2)').should('have.text', `${dataFillingFile.Father_name}`);
+
+        //Grand Father
+        cy.get(':nth-child(3) > ul > :nth-child(4) > :nth-child(2)').should('have.text', `${dataFillingFile.Grandfather_name}`);
+
+        //State
+        cy.get(':nth-child(3) > ul > :nth-child(6) > :nth-child(2)').should('have.text', `${dataFillingFile.State}`);
+
+        //District
+        cy.get(':nth-child(3) > ul > :nth-child(7) > :nth-child(2)').should('have.text', `${dataFillingFile.District}`);
+
+        //Address
+        cy.get(':nth-child(3) > ul > :nth-child(10) > :nth-child(2)').should('have.text', `${dataFillingFile.Address}`);
+
+        /*===========================================Initiation Details======================================================= */
+
+        //Master name
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(1) > :nth-child(2)').should('have.text', `${dataFillingFile.Master_name}`);
+        
+        //Place of Initiation
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(3) > :nth-child(2)').should('have.text', `${dataFillingFile.Place_of_initiation}`);
+
+        //Initiation Year
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(4) > :nth-child(2)').should('have.text', `${dataFillingFile.Initiation_year}`);
+
+        //Initiated as
+        cy.get(':nth-child(4) > :nth-child(2) > :nth-child(6) > :nth-child(2)').should('have.text', `${dataFillingFile.Initiated_as}`);
 
       })
     })

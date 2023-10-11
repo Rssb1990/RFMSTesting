@@ -13,7 +13,7 @@ describe('Testing Automation RFMS',()=>{
           console.log(sum);
 
           cy.get('#DNT_CaptchaInputText').type(sum);
-          cy.get('.btn').click().wait(2000);
+          cy.get('.btn').click().wait(1000);
       });
       cy.get('#app-menu-button').click();
       cy.get('.MuiList-root > li').contains('New Resitting Form').click();
@@ -28,10 +28,6 @@ describe('Testing Automation RFMS',()=>{
 
         cy.get(':nth-child(5) > .MuiFormControl-root > .MuiInputBase-root > #grandfathername').type(`${dataFillingFile.Grandfather_name}`);
 
-        // -----------------------------------------------------------------
-        //Add country Selection option also. Its currently missing.
-        // -----------------------------------------------------------------
-
         cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.State}`).type('{downarrow}').type('{enter}');
 
         cy.get(':nth-child(2) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.District}`).type('{downarrow}').type('{enter}');
@@ -40,30 +36,37 @@ describe('Testing Automation RFMS',()=>{
 
         cy.get(':nth-child(11) > .MuiFormControl-root > .MuiInputBase-root > #address').type(`${dataFillingFile.Address}`);
 
-        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root');
-
-        cy.get('.css-1fbyq98 > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root').click().type(`${dataFillingFile.DOB}`);
-
         cy.get('.MuiGrid-grid-xs-3 > .MuiButtonBase-root').click();
 
-        cy.get('[name="master"]').click().clear().type(`${dataFillingFile.Master_name}`).type("{downarrow}").type("{enter}");
+        //-------------------------------2nd Part checking-------------------------------------------------------------------------
 
-        cy.get('[name="initiationyear"]').click().clear().type(`${dataFillingFile.Initiation_year}`);
+        //Title checking
+        cy.get('[id=":r1v:"]').should('have.value', 'Mr.');
 
-        cy.get('[name="placeof initiation"]').click().type(`${dataFillingFile.Place_of_initiation}`).type("{downarrow}").type("{enter}");
+        //Name checking
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > .css-rk8e6v > .MuiGrid-grid-xs-true > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Name}`);
 
-        cy.get('[name="initiatedas"]').click().clear().type(`${dataFillingFile.Initiated_as}`).type("{downarrow}").type("{enter}");
+        //Father checking
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(3) > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Father_name}`);
 
-        cy.get('.css-kh98e3 > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
+        //GrandFather checking
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(4) > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Grandfather_name}`);
 
-        cy.get('#root > main > div.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-column.content-panel.css-bp6iic > footer > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true.css-1kycp66 > button').click();
+        //State
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(6) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.State}`);
 
-        cy.get(':nth-child(1) > .ResittingFormView_left-normal-padding__-uuXl').should('exist')
+        //District
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(7) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.District}`);
 
-        // cy.get('h1').should('have.text', 'NAAMDAAN RE-SITTING APPLICATION FORM');
+        //Postoffice
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(8) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > input').should('have.value', `${dataFillingFile.Post_office}`);
+
+        //Address
+        cy.get(':nth-child(3) > .MuiGrid-spacing-xs-2 > :nth-child(10) > .MuiFormControl-root > .MuiInputBase-root > textarea').should('have.value', `${dataFillingFile.Address}`);
 
 
       })
+
 
       cy.log("Complete");
       

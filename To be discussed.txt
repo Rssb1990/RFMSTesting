@@ -1,0 +1,48 @@
+I want to change the pattern of how data is entered into the form
+
+From this:
+{
+    "Title":"MR.",
+    "Name":"XYZ",
+    "Gender":"M",
+    "Father_name":"ABCDEF",
+    "Grandfather_name":"HIJKLM",
+    "Country":"INDIA",
+    "State":"DELHI",
+    "District":"DELHI",
+    "Post_office":"DELHI",
+    "Address":"NOPQRS",
+    "DOB":"02021960",
+    "Master_name":"MAHARAJ CHARAN SINGH JI",
+    "Place_of_initiation":"DELHI",
+    "Initiation_year":"1980",
+    "Initiated_as":"SINGLE"
+
+}
+
+In above pattern we have to create a separate JSON file everytime for new testing data and for multiple it blocks repeatetion of code will be ther. But code will be less complex and multiple it blocks will be easy to define.
+
+To this:
+{
+    "one":["Mr.", "xyz", "abcdef", "hijklm", "INDIA", "DELHI", "DELHI", "DELHI", "nopqrs", "02021960", "MAHARAJ CHARAN SINGH JI", "DELHI", "1980", "SINGLE"],
+    "two":["Mr.", "xyz", "abcdef", "hijklm", "INDIA", "DELHI", "DELHI", "DELHI", "nopqrs", "02021960", "MAHARAJ CHARAN SINGH JI", "DELHI", "1980", "SINGLE"],
+    "three":["Mr.", "xyz", "abcdef", "hijklm", "INDIA", "DELHI", "DELHI", "DELHI", "nopqrs", "02021960", "MAHARAJ CHARAN SINGH JI", "DELHI", "1980", "SINGLE"]
+}
+
+In above format code repeatetion will not be there but code will be complex.
+
+
+Basic code for that:
+
+cy.fixture('slipGenerationData2.json').then((dataFillingFile) =>{
+
+        cy.wrap(Object.keys(dataFillingFile)).each((testData) => {
+          let array = dataFillingFile[testData];
+
+          cy.wrap(array).each((element, index) =>{
+            cy.log(`Element ${index+1} in ${testData}: ${element}`);
+          })
+        })
+        
+
+      })
